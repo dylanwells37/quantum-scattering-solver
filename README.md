@@ -59,5 +59,5 @@ To run the program with the Square Well potential using the Low Energy Born-Appr
 ### Methods
     
             1. general
-            2. low
+            2. low_energy
             3. spherical
