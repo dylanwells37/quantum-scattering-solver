@@ -46,10 +46,14 @@ BASE=  scattering_solver
 
 # Put all C++ (or other) source files here.  NO SPACES after continuation \'s.
 SRCS= \
-scattering_solver.cpp
+scattering_solver.cpp \
+potentials.cpp \
+methods.cpp
 
 # Put all header files here.  NO SPACES after continuation \'s.
 HDRS= \
+potentials.h \
+methods.h
 
 # Put any input files you want to be saved in tarballs (e.g., sample files).
 INPFILE= \
@@ -84,13 +88,13 @@ ZIPFILE= $(BASE).zip
 
 CXX= g++
 CFLAGS=  -g -O0
-CWARNS= -Werror -Wall -W -Wshadow -fno-common 
+CWARNS= -Werror -W -Wshadow -fno-common 
 MOREFLAGS= -Wpedantic -Wpointer-arith -Wcast-qual -Wcast-align \
            -Wwrite-strings -fshort-enums 
 
 # add relevant libraries and link options
-LIBS=           
-LDFLAGS= -lgsl -lgslcblas 
+LIBS= 
+LDFLAGS= -lgsl -lgslcblas
  
 ###########################################################################
 # 4. Instructions to compile and link, with dependencies

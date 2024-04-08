@@ -25,12 +25,67 @@
 #include <iostream>    // cout and cin
 #include <iomanip>     // manipulators like setprecision
 #include <cmath>
-#include <string>     // C++ strings         
+#include <string.h>     // C++ strings         
 #include <fstream>  
-
 using namespace std;   
+#include "potentials.h"  // Header file for the Potentials class
+#include "methods.h"
+
+int check_parameters(int argc, char *argv[], 
+                    char **potential, char **method);
 
 int main (int argc, char *argv[])
 {
+    char *potential = new char[20];
+    char *method = new char[20];
+
+    // Check for valid potential
+    check_parameters(argc, argv, &potential, &method);
+
+    // Load the potential
+    
+
+
+}
+
+int check_parameters(int argc, char *argv[], 
+                    char **potential_ptr, char **method_ptr){
+    //
+    if (argc != 3) 
+    {
+        cout << "Usage: scattering_solver <potential> <method>" << endl;
+        exit(1);
+    }
+
+    // Set the potential and method strings to the passed arguments
+    *potential_ptr = argv[1];
+    *method_ptr = argv[2];
+
+    char *potential = *potential_ptr;
+    char *method = *method_ptr;
+
+    // Check if the potential and method are valid
+    if (strcmp(potential, "coulomb") != 0 &&
+        strcmp(potential, "square_well") != 0 &&
+        strcmp(potential, "gaussian") != 0 &&
+        strcmp(potential, "yukawa") != 0 &&
+        strcmp(potential, "morse") != 0 &&
+        strcmp(potential, "lennard_jones") != 0)
+    {
+        
+        cout << "Invalid potential: " << potential << endl;
+        exit(1);
+    }
+
+    if (strcmp(method, "spherical") != 0 &&
+        strcmp(method, "low_energy") != 0 &&
+        strcmp(method, "born") != 0)
+    {
+        cout << "Invalid method: " << method << endl;
+
+        exit(1);
+    }
+
+    return 0;
 
 }

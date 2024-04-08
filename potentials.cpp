@@ -44,7 +44,7 @@ Potentials::~Potentials()
 // Coulomb potential
 double Potentials::coulomb_potential(double r)
 {
-    return 0
+    return 0;
 }
 
 
