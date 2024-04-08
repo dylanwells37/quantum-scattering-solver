@@ -26,20 +26,21 @@
 //*****************************************************************
 
 // Constructor for Potentials
-Potentials::Potentials(char *passed_potential, potential_parameters  *passed_parameters)
+Potential::Potential(char *passed_potential, potential_parameters  *passed_parameters)
 {
     potential = passed_potential;
-    parameters = passed_parameters;
+    potl_params = passed_parameters;
 }
 
 // Destructor for Potentials
-Potentials::~Potentials()
+Potential::~Potential()
 {
-    // Destructor
 }
 
-double Potentials::get_potential(double r)
+double Potential::get_potential(double r)
 {
+    // Get the potential at a given distance r
+    // for a given potential type
     if (potential == "coulomb")
     {
         return coulomb_potential(r);
@@ -74,21 +75,23 @@ double Potentials::get_potential(double r)
 
 
 // Coulomb potential
-double Potentials::coulomb_potential(double r)
+double Potential::coulomb_potential(double r)
 {
     // Coulomb potential: V(r) = a/r
-    double a = parameters->a;
+
+    double a = potl_params->a;
     
     return -a/r;
 }
 
 
 // Square well potential
-double Potentials::square_well_potential(double r)
+double Potential::square_well_potential(double r)
 {
     // Square well potential: V(r) = -a for r < b, V(r) = 0 for r > b
-    double a = parameters->a;
-    double b = parameters->b;
+    
+    double a = potl_params->a;
+    double b = potl_params->b;
 
     if (r < b)
     {
@@ -103,28 +106,28 @@ double Potentials::square_well_potential(double r)
 
 
 // Gaussian potential
-double Potentials::gaussian_potential(double r)
+double Potential::gaussian_potential(double r)
 {
     return 0;
 }
 
 
 // Yukawa potential
-double Potentials::yukawa_potential(double r)
+double Potential::yukawa_potential(double r)
 {
     return 0;
 }
 
 
 // Morse potential
-double Potentials::morse_potential(double r)
+double Potential::morse_potential(double r)
 {
     return 0;
 }
 
 
 // Lennard-Jones potential
-double Potentials::lennard_jones_potential(double r)
+double Potential::lennard_jones_potential(double r)
 {
     return 0;
 }

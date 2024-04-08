@@ -94,7 +94,7 @@ MOREFLAGS= -Wpedantic -Wpointer-arith -Wcast-qual -Wcast-align \
 
 # add relevant libraries and link options
 LIBS= 
-LDFLAGS= -lgsl -lgslcblas
+LDFLAGS= -lgsl -lgslcblas -lpugixml
  
 ###########################################################################
 # 4. Instructions to compile and link, with dependencies

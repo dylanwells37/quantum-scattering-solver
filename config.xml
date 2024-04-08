@@ -1,0 +1,16 @@
+<config> <!-- configuration file for quantum scattering solver -->
+    <potential>coulomb</potential> <!-- coulomb, square-well, yukawa -->
+    <method>low_energy</method> <!-- low_energy, spherical, born -->
+    <potential_parameters> <!-- potential parameters -->
+        <a>1.12454</a> 
+        <b>1.1423</b>
+        <c>1.6345</c>
+        <d>1.68579</d>
+    </potential_parameters>
+    <method_parameters> <!-- method parameters -->
+        <m>1.35487</m> <!-- mass-->
+        <k>1.34580</k> <!-- wave number -->
+        <theta>90.234532</theta> <!-- theta angle -->
+        <phi>22.5345</phi> <!-- phi angle -->
+    </method_parameters>
+</config>

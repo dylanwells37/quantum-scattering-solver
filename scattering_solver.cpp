@@ -27,55 +27,69 @@
 #include <cmath>
 #include <string.h>     // C++ strings         
 #include <fstream>  
+#include <pugixml.hpp>
+
 using namespace std;   
 #include "potentials.h"  // Header file for the Potentials class
 #include "methods.h"
 
 
-int check_parameters(int argc, char *argv[], 
-                    char **potential, char **method);
+int check_parameters(char **potential_ptr, char **method_ptr,
+                     potential_parameters **potl_params_ptr,
+                     method_parameters **method_params_ptr);
 
-int main (int argc, char *argv[])
+int main ()
 {
-    char *potential = new char[20];
-    char *method = new char[20];
+    // Initialize parameters
+    char *potential;
+    char *method;
+    potential_parameters *potl_params = new potential_parameters;
+    method_parameters *method_params = new method_parameters;
 
-    // Check for valid potential
-    check_parameters(argc, argv, &potential, &method);
+    // Check to see if the input parameters are valid
+    check_parameters(&potential, &method, &potl_params, &method_params);
 
-    // Load the potential
-    
-    potential_parameters *parameters = new potential_parameters;
-    // load in the parameters
-    parameters->a = atof(argv[3]);
-    parameters->b = atof(argv[4]);
-    parameters->c = atof(argv[5]);
-    parameters->d = atof(argv[6]);
+    cout << "Potential: " << potential << endl;
+    cout << "Method: " << method << endl;
+    cout << "Potential parameters: " << potl_params->a << " " << potl_params->b << " " << potl_params->c << " " << potl_params->d << endl;
+    cout << "Method parameters: " << method_params->m << " " << method_params->k << " " << method_params->theta << " " << method_params->phi << endl;
 
-    Potentials *pot = new Potentials(potential, parameters);
-
-    double r = 10.0;
-    double V = pot->get_potential(r);
-    cout << "Potential at r = " << r << " is " << V << endl;
-    
 
 }
 
-int check_parameters(int argc, char *argv[], 
-                    char **potential_ptr, char **method_ptr){
-    //
-    if (argc != 7) 
-    {
-        cout << "Usage: scattering_solver <potential> <method> <a> <b> <c> <d>" << endl;
+int check_parameters(char **potential_ptr, char **method_ptr,
+                     potential_parameters **potl_params_ptr,
+                     method_parameters **method_params_ptr){
+    
+    char *potential;
+    char *method;
+    // Read in the xml config file
+    pugi::xml_document doc;
+    if (!doc.load_file("config.xml")) {
+        cout << "Could not load config.xml" << endl;
         exit(1);
     }
 
-    // Set the potential and method strings to the passed arguments
-    *potential_ptr = argv[1];
-    *method_ptr = argv[2];
+    pugi::xml_node config = doc.child("config");
 
-    char *potential = *potential_ptr;
-    char *method = *method_ptr;
+    // Set values of potential and method parameters
+    *potential_ptr = strdup(config.child_value("potential"));
+    *method_ptr = strdup(config.child_value("method"));
+
+    pugi::xml_node potl_params = config.child("potential_parameters");
+    (*potl_params_ptr)->a = potl_params.child("a").text().as_double();
+    (*potl_params_ptr)->b = potl_params.child("b").text().as_double();
+    (*potl_params_ptr)->c = potl_params.child("c").text().as_double();
+    (*potl_params_ptr)->d = potl_params.child("d").text().as_double();
+
+    pugi::xml_node method_params = config.child("method_parameters");
+    (*method_params_ptr)->m = method_params.child("m").text().as_double();
+    (*method_params_ptr)->k = method_params.child("k").text().as_double();
+    (*method_params_ptr)->theta = method_params.child("theta").text().as_double();
+    (*method_params_ptr)->phi = method_params.child("phi").text().as_double();
+
+    potential = *potential_ptr;
+    method = *method_ptr;
 
     // Check if the potential and method are valid
     if (strcmp(potential, "coulomb") != 0 &&
@@ -85,7 +99,6 @@ int check_parameters(int argc, char *argv[],
         strcmp(potential, "morse") != 0 &&
         strcmp(potential, "lennard_jones") != 0)
     {
-        
         cout << "Invalid potential: " << potential << endl;
         exit(1);
     }
@@ -95,10 +108,8 @@ int check_parameters(int argc, char *argv[],
         strcmp(method, "born") != 0)
     {
         cout << "Invalid method: " << method << endl;
-
         exit(1);
     }
 
     return 0;
-
 }

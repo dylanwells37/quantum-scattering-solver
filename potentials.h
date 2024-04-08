@@ -6,8 +6,8 @@
 //
 //*****************************************************************
 
-#ifndef POTENTIALS_H
-#define POTENTIALS_H
+#ifndef POTENTIAL_H
+#define POTENTIAL_H
 
 struct potential_parameters
 {
@@ -19,17 +19,17 @@ struct potential_parameters
 
 #include <string>
 
-class Potentials
+class Potential
 {
     public:
-        Potentials(char *passed_potential, potential_parameters  *passed_parameters);
-        ~Potentials();
+        Potential(char *passed_potential, potential_parameters  *passed_parameters);
+        ~Potential();
 
         double get_potential(double r);
 
     private:
-        std::string potential;
-        potential_parameters  *parameters;
+        char * potential;
+        potential_parameters  *potl_params;
         double coulomb_potential(double r);
         double square_well_potential(double r);
         double gaussian_potential(double r);
