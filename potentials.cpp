@@ -19,39 +19,86 @@
 #include <iostream>
 #include <iomanip>
 #include <cmath>
-#include <string>
+#include <string.h>
 
 #include "potentials.h"
 
 //*****************************************************************
 
 // Constructor for Potentials
-Potentials::Potentials(std::string passed_potential, double passed_a, double passed_b, double passed_c, double passed_d)
+Potentials::Potentials(char *passed_potential, potential_parameters  *passed_parameters)
 {
     potential = passed_potential;
-    a = passed_a;
-    b = passed_b;
-    c = passed_c;
-    d = passed_d;
+    parameters = passed_parameters;
 }
 
 // Destructor for Potentials
 Potentials::~Potentials()
 {
+    // Destructor
+}
+
+double Potentials::get_potential(double r)
+{
+    if (potential == "coulomb")
+    {
+        return coulomb_potential(r);
+    }
+    else if (potential == "square_well")
+    {
+        return square_well_potential(r);
+    }
+    else if (potential == "gaussian")
+    {
+        return gaussian_potential(r);
+    }
+    else if (potential == "yukawa")
+    {
+        return yukawa_potential(r);
+    }
+    else if (potential == "morse")
+    {
+        return morse_potential(r);
+    }
+    else if (potential == "lennard_jones")
+    {
+        return lennard_jones_potential(r);
+    }
+    else
+    {
+        std::cout << "Invalid potential" << std::endl;
+        exit(1);
+    }
+
 }
 
 
 // Coulomb potential
 double Potentials::coulomb_potential(double r)
 {
-    return 0;
+    // Coulomb potential: V(r) = a/r
+    double a = parameters->a;
+    
+    return -a/r;
 }
 
 
 // Square well potential
 double Potentials::square_well_potential(double r)
 {
-    return 0;
+    // Square well potential: V(r) = -a for r < b, V(r) = 0 for r > b
+    double a = parameters->a;
+    double b = parameters->b;
+
+    if (r < b)
+    {
+        return -a;
+    }
+    else
+    {
+        return 0;
+    }
+
 }
 
 

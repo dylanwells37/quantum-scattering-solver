@@ -31,6 +31,7 @@ using namespace std;
 #include "potentials.h"  // Header file for the Potentials class
 #include "methods.h"
 
+
 int check_parameters(int argc, char *argv[], 
                     char **potential, char **method);
 
@@ -44,16 +45,28 @@ int main (int argc, char *argv[])
 
     // Load the potential
     
+    potential_parameters *parameters = new potential_parameters;
+    // load in the parameters
+    parameters->a = atof(argv[3]);
+    parameters->b = atof(argv[4]);
+    parameters->c = atof(argv[5]);
+    parameters->d = atof(argv[6]);
 
+    Potentials *pot = new Potentials(potential, parameters);
+
+    double r = 10.0;
+    double V = pot->get_potential(r);
+    cout << "Potential at r = " << r << " is " << V << endl;
+    
 
 }
 
 int check_parameters(int argc, char *argv[], 
                     char **potential_ptr, char **method_ptr){
     //
-    if (argc != 3) 
+    if (argc != 7) 
     {
-        cout << "Usage: scattering_solver <potential> <method>" << endl;
+        cout << "Usage: scattering_solver <potential> <method> <a> <b> <c> <d>" << endl;
         exit(1);
     }
 
