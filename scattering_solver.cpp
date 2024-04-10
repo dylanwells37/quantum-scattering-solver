@@ -25,13 +25,13 @@
 #include <iostream>    // cout and cin
 #include <iomanip>     // manipulators like setprecision
 #include <cmath>
-#include <string.h>     // C++ strings         
+#include <string.h>    // C++ strings         
 #include <fstream>  
-#include <pugixml.hpp>
+#include <pugixml.hpp> // XML parser
 
 using namespace std;   
-#include "potentials.h"  // Header file for the Potentials class
-#include "methods.h"
+#include "potentials.h"  // Header file for the Potential class
+#include "methods.h"     // Header file for the Method class
 
 
 int check_parameters(char **potential_ptr, char **method_ptr,
@@ -40,20 +40,27 @@ int check_parameters(char **potential_ptr, char **method_ptr,
 
 int main ()
 {
+    double result;
+    //double error;
     // Initialize parameters
     char *potential;
     char *method;
     potential_parameters *potl_params = new potential_parameters;
     method_parameters *method_params = new method_parameters;
-
+    
     // Check to see if the input parameters are valid
+    // And load the parameters from the config.xml file
     check_parameters(&potential, &method, &potl_params, &method_params);
 
-    cout << "Potential: " << potential << endl;
-    cout << "Method: " << method << endl;
-    cout << "Potential parameters: " << potl_params->a << " " << potl_params->b << " " << potl_params->c << " " << potl_params->d << endl;
-    cout << "Method parameters: " << method_params->m << " " << method_params->k << " " << method_params->theta << " " << method_params->phi << endl;
+    // Create the potential and method objects
+    Potential *pot = new Potential(potential, potl_params);
+    method_params->pot = pot;
+    Method *meth = new Method(method, method_params);
 
+    // Solve for the differential cross-section
+    result = meth->solve_scattering();
+
+    cout << "The differential cross-section is: " << result << endl;//<< " +/- " << error << endl;
 
 }
 
@@ -87,6 +94,7 @@ int check_parameters(char **potential_ptr, char **method_ptr,
     (*method_params_ptr)->k = method_params.child("k").text().as_double();
     (*method_params_ptr)->theta = method_params.child("theta").text().as_double();
     (*method_params_ptr)->phi = method_params.child("phi").text().as_double();
+    
 
     potential = *potential_ptr;
     method = *method_ptr;
@@ -97,7 +105,8 @@ int check_parameters(char **potential_ptr, char **method_ptr,
         strcmp(potential, "gaussian") != 0 &&
         strcmp(potential, "yukawa") != 0 &&
         strcmp(potential, "morse") != 0 &&
-        strcmp(potential, "lennard_jones") != 0)
+        strcmp(potential, "lennard_jones") != 0
+        )
     {
         cout << "Invalid potential: " << potential << endl;
         exit(1);

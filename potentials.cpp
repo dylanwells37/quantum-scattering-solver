@@ -37,38 +37,38 @@ Potential::~Potential()
 {
 }
 
-double Potential::get_potential(double r)
+double Potential::get_potential(double r, double theta, double phi)
 {
     // Get the potential at a given distance r
     // for a given potential type
-    if (potential == "coulomb")
+    if (strcmp(potential, "coulomb") == 0)
     {
         return coulomb_potential(r);
     }
-    else if (potential == "square_well")
+    else if (strcmp(potential, "square_well") == 0)
     {
         return square_well_potential(r);
     }
-    else if (potential == "gaussian")
+    else if (strcmp(potential, "gaussian") == 0)
     {
         return gaussian_potential(r);
     }
-    else if (potential == "yukawa")
+    else if (strcmp(potential, "yukawa") == 0)
     {
         return yukawa_potential(r);
     }
-    else if (potential == "morse")
+    else if (strcmp(potential, "morse") == 0)
     {
         return morse_potential(r);
     }
-    else if (potential == "lennard_jones")
+    else if (strcmp(potential, "lennard_jones") == 0)
     {
         return lennard_jones_potential(r);
     }
     else
     {
-        std::cout << "Invalid potential" << std::endl;
-        exit(1);
+        std::cout << "Invalid potential type" << std::endl;
+        return 0;
     }
 
 }

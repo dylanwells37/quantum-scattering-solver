@@ -15,7 +15,6 @@
 struct method_parameters
 {
     const double hbar = 1.0545718e-34; // J s
-    const double pi = 3.14159265358979323846;
     double m;
     double k;
     double theta;
@@ -28,14 +27,17 @@ class Method
     public:
         Method(char *passed_method, method_parameters *passed_parameters);
         ~Method();
-        double get_integrand(double r);
+        double solve_scattering();
 
     private:
         char * method;
         method_parameters *method_params;
-        double born(double r);
-        double low_energy(double r);
-        double spherical(double r);
+        double born();
+        double low_energy();
+        double spherical();
+        double low_energy_integrand(double r, double theta, double phi, void *params);
+        double spherical_integrand(double r, void *params);
+        double born_integrand(double r, double theta, double phi, void *params);
 };
 
 #endif

@@ -25,7 +25,7 @@ class Potential
         Potential(char *passed_potential, potential_parameters  *passed_parameters);
         ~Potential();
 
-        double get_potential(double r);
+        double get_potential(double r, double theta=0, double phi=0);
 
     private:
         char * potential;

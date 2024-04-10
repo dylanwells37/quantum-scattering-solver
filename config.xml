@@ -1,9 +1,9 @@
 <config> <!-- configuration file for quantum scattering solver -->
-    <potential>coulomb</potential> <!-- coulomb, square-well, yukawa -->
-    <method>low_energy</method> <!-- low_energy, spherical, born -->
+    <potential>square_well</potential> <!-- coulomb, square-well, yukawa -->
+    <method>spherical</method> <!-- low_energy, spherical, born -->
     <potential_parameters> <!-- potential parameters -->
-        <a>1.12454</a> 
-        <b>1.1423</b>
+        <a>1.12454</a>  <!-- Constant for coulomb, V for square well-->
+        <b>1.1423</b>  <!-- Radius of square well -->
         <c>1.6345</c>
         <d>1.68579</d>
     </potential_parameters>
