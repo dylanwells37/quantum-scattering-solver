@@ -21,6 +21,7 @@ struct method_parameters
     double theta;
     double phi;
     Potential *pot;
+    integration_parameters *integ_params;
 };
 
 class Method

@@ -24,9 +24,10 @@
 //*****************************************************************
 
 // Constructor for Integration Routines
-Integration::Integration(char *passed_method, integration_parameters  *passed_parameters){
+Integration::Integration(char *passed_method, method_parameters *passed_parameters){
     method = passed_method;
-    integ_params = passed_parameters;
+    method_parameters = passed_parameters;
+    integ_params = passed_parameters->integ_params;
 }
 
 // Destructor for Integration Routines
@@ -58,6 +59,7 @@ double Integration::gsl_integration(){
 
     void *method_params = integ_params->method_params;
     int num_samples = integ_params->num_samples;
+    int dimensions = integ_params->dimensions;
     double min_radius = integ_params->min_radius;
     double max_radius = integ_params->max_radius;
     double (*integrand)(double, void *) = integ_params->integrand;

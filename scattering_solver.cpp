@@ -57,6 +57,7 @@ int main (int argc, char *argv[])
     // Create the potential and method objects
     Potential *pot = new Potential(potential, potl_params);
     method_params->pot = pot;
+    method_params->integ_params = integ_params;
     Method *meth = new Method(method, method_params);
 
     // Solve for the differential cross-section
@@ -94,18 +95,17 @@ int check_parameters(string *filename,
     (*potl_params_ptr)->b = potl_params.child("b").text().as_double();
     (*potl_params_ptr)->c = potl_params.child("c").text().as_double();
     (*potl_params_ptr)->d = potl_params.child("d").text().as_double();
+    
+    pugi::xml_node potl = config.child("integration_parameters");
+    (*integration_params_ptr)->min_radius = potl.child("min_radius").text().as_double();
+    (*integration_params_ptr)->max_radius = potl.child("max_radius").text().as_double();
+    (*integration_params_ptr)->num_samples = potl.child("num_samples").text().as_int();
 
     pugi::xml_node method_params = config.child("method_parameters");
     (*method_params_ptr)->m = method_params.child("m").text().as_double();
     (*method_params_ptr)->k = method_params.child("k").text().as_double();
     (*method_params_ptr)->theta = method_params.child("theta").text().as_double();
     (*method_params_ptr)->phi = method_params.child("phi").text().as_double();
-    
-    pugi::xml_node potl = config.child("integration_parameters");
-    (*integration_params_ptr)->min_radius = potl.child("min_radius").text().as_double();
-    (*integration_params_ptr)->max_radius = potl.child("max_radius").text().as_double();
-    (*integration_params_ptr)->num_samples = potl.child("num_samples").text().as_int();
-    (*integration_params_ptr)->method_params = *method_params_ptr;
 
     potential = *potential_ptr;
     method = *method_ptr;

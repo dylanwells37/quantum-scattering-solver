@@ -14,10 +14,11 @@
 
 struct integration_parameters
 {
+    int dimensions;
     double min_radius;
     double max_radius;
-    double num_samples;
-    void *method_params;
+    int num_samples;
+    //void *method_params;
 };
 
 
@@ -29,7 +30,9 @@ class Integration
 
     private:
         char * method;
-        integ_params;
+        method_parameters *method_params;
+        integration_parameters *integ_params;
+
 };
 
 #endif

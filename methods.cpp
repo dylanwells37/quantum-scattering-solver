@@ -71,8 +71,14 @@ double Method::low_energy(){
     // f(theta,phi) =  -m/(2pih^2) * integral[V(r0) d^3r0]
     // where V(r0) is the potential at a distance r0 from the origin
 
-    double const front_const = - method_params->m / (2 * M_PI * pow(method_params->hbar, 2));
+    // Define the integrand
+    double mass = method_params->m;
+    double hbar = method_params->hbar;
+    double const front_const = - mass / (2 * M_PI * pow(hbar, 2));
 
+    integration_parameters *integ_params = new integration_parameters;
+    integ_params = method_params->integ_params;
+    integ_params->dimensions = 1;
     
     
     return 0;
@@ -84,8 +90,23 @@ double Method::low_energy(){
 double Method::spherical(){
     // return the value of f(theta,phi) for the spherical approximation
 
-    
+    double theta = method_params->theta;
+    double phi = method_params->phi;
+    double k = method_params->k;
+    double hbar = method_params->hbar;
+    double mass = method_params->m;
+    double kappa = 2 * k * sin(theta / 2);
+    double result;
+    //double error;
+    double const front_const = - 2 * mass / (pow(hbar, 2) * kappa);
 
+    // Create the integration parameters structure
+    integration_parameters *integ_params = new integration_parameters;
+    integ_params = method_params->integ_params;
+    integ_params->dimensions = 1;
+
+    // Create the integration workspace
+    
 
     
     return result;
