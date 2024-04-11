@@ -73,6 +73,7 @@ double Method::low_energy(){
     double const front_const = - method_params->m / (2 * M_PI * pow(method_params->hbar, 2));
 
     
+    
     return 0;
 
 }

@@ -47,7 +47,7 @@ int main ()
     char *method;
     potential_parameters *potl_params = new potential_parameters;
     method_parameters *method_params = new method_parameters;
-    
+
     // Check to see if the input parameters are valid
     // And load the parameters from the config.xml file
     check_parameters(&potential, &method, &potl_params, &method_params);
@@ -67,11 +67,11 @@ int main ()
 int check_parameters(char **potential_ptr, char **method_ptr,
                      potential_parameters **potl_params_ptr,
                      method_parameters **method_params_ptr){
-    
+    // Read in the xml config file
     char *potential;
     char *method;
-    // Read in the xml config file
     pugi::xml_document doc;
+
     if (!doc.load_file("config.xml")) {
         cout << "Could not load config.xml" << endl;
         exit(1);
@@ -102,10 +102,7 @@ int check_parameters(char **potential_ptr, char **method_ptr,
     // Check if the potential and method are valid
     if (strcmp(potential, "coulomb") != 0 &&
         strcmp(potential, "square_well") != 0 &&
-        strcmp(potential, "gaussian") != 0 &&
-        strcmp(potential, "yukawa") != 0 &&
-        strcmp(potential, "morse") != 0 &&
-        strcmp(potential, "lennard_jones") != 0
+        strcmp(potential, "wacky") != 0 
         )
     {
         cout << "Invalid potential: " << potential << endl;
