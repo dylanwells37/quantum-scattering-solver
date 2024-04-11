@@ -9,10 +9,7 @@
 // Supports:
 //  - coulomb_potential
 //  - square_well_potential
-//  - gaussian_potential
-//  - yukawa_potential
-//  - morse_potential
-//  - lennard_jones_potential
+//  - wacky potential
 //*****************************************************************
 // Include Files
 

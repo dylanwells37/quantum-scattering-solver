@@ -32,17 +32,19 @@
 using namespace std;   
 #include "potentials.h"  // Header file for the Potential class
 #include "methods.h"     // Header file for the Method class
+#include "integration.h" // Header file for the Integration class
 
 
 int check_parameters(char **potential_ptr, char **method_ptr,
                      potential_parameters **potl_params_ptr,
                      method_parameters **method_params_ptr);
 
-int main ()
-{
+int main (int argc, char *argv[])
+{   
+    // Initialize Variables
+    string filename = argv[1];
     double result;
     //double error;
-    // Initialize parameters
     char *potential;
     char *method;
     potential_parameters *potl_params = new potential_parameters;
@@ -64,15 +66,18 @@ int main ()
 
 }
 
-int check_parameters(char **potential_ptr, char **method_ptr,
+int check_parameters(string *filename,
+                     char **potential_ptr, char **method_ptr,
                      potential_parameters **potl_params_ptr,
-                     method_parameters **method_params_ptr){
+                     method_parameters **method_params_ptr,
+                     integration_parameters **integration_params_ptr){
     // Read in the xml config file
     char *potential;
     char *method;
     pugi::xml_document doc;
+    string filepath = "configs/" + filename;
 
-    if (!doc.load_file("config.xml")) {
+    if (!doc.load_file(filepath.c_str()))
         cout << "Could not load config.xml" << endl;
         exit(1);
     }
@@ -82,6 +87,7 @@ int check_parameters(char **potential_ptr, char **method_ptr,
     // Set values of potential and method parameters
     *potential_ptr = strdup(config.child_value("potential"));
     *method_ptr = strdup(config.child_value("method"));
+    *integration_ptr = strdup(config.child_value("integration"));
 
     pugi::xml_node potl_params = config.child("potential_parameters");
     (*potl_params_ptr)->a = potl_params.child("a").text().as_double();
@@ -95,6 +101,11 @@ int check_parameters(char **potential_ptr, char **method_ptr,
     (*method_params_ptr)->theta = method_params.child("theta").text().as_double();
     (*method_params_ptr)->phi = method_params.child("phi").text().as_double();
     
+    pugi::xml_node potl = config.child("integration_parameters");
+    (*integration_params_ptr)->min_radius = potl.child("min_radius").text().as_double();
+    (*integration_params_ptr)->max_radius = potl.child("max_radius").text().as_double();
+    (*integration_params_ptr)->num_samples = potl.child("num_samples").text().as_int();
+    (*integration_params_ptr)->method_params = *method_params_ptr;
 
     potential = *potential_ptr;
     method = *method_ptr;

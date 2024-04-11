@@ -1,6 +1,6 @@
-// file: potentials.h
+// file: methods.h
 //
-// Header file for the Potentials C++ class.
+// Header file for the Methods C++ class.
 //
 // Programmer:  Dylan Wells  <wells.1629@osu.edu>
 //
@@ -11,6 +11,7 @@
 
 #include <string>
 #include "potentials.h"
+#include "integration.h"
 
 struct method_parameters
 {

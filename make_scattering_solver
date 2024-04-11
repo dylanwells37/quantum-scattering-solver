@@ -48,12 +48,14 @@ BASE=  scattering_solver
 SRCS= \
 scattering_solver.cpp \
 potentials.cpp \
-methods.cpp
+methods.cpp \
+integration.cpp
 
 # Put all header files here.  NO SPACES after continuation \'s.
 HDRS= \
 potentials.h \
-methods.h
+methods.h \
+integration.h
 
 # Put any input files you want to be saved in tarballs (e.g., sample files).
 INPFILE= \

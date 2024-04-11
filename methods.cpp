@@ -21,6 +21,7 @@
 
 #include "methods.h"
 #include "potentials.h"
+#include "integration.h"
 //*****************************************************************
 
 // Constructor for Methods
@@ -81,30 +82,10 @@ double Method::low_energy(){
 
 // Spherical method
 double Method::spherical(){
-    // return the integrand for the spherical approximation
-    // f(theta,phi) = -2m/(h^2K) * integral[r0 * sin(Kr0) * V(r0) dr0] from 0 to infinity
+    // return the value of f(theta,phi) for the spherical approximation
+
     
-    // define the integrand
-    gsl_function F;
-    F.function = [](double x, void *params) -> double {
-        return static_cast<Method*>(params)->spherical_integrand(x, params);
-    };
-    F.params = method_params;
 
-
-    std::cout << "got here 2" << std::endl;
-    // define the workspace
-    gsl_integration_workspace *w = gsl_integration_workspace_alloc(1000);
-    
-    // define the integral
-    double result, error;
-    //gsl_integration_qagiu(&F, 0, 0, 1e-7, 1000, w, &result, &error);
-
-    gsl_integration_qagiu(&F, 0, 0, 1, 100, w, &result, &error);
-
-    std::cout << "got here 3" << std::endl;
-    // free the workspace
-    gsl_integration_workspace_free(w);
 
     
     return result;
