@@ -2,20 +2,17 @@
 
 quantum-scattering-solver is a C++ program made to solve for the differnetial cross-section for a given potential in a quantum scattering problem.
 
-This program supports three different methods of solving the for the differential cross-section (WIP):
+This program supports three different methods of solving the for the differential cross-section:
 
-        1. General Born-Approximation
+        1. General Born-Approximation (Future Wrok)
         2. Low Energy (Long Wavelength) Born-Approximation
         3. Spherically Symmetric Born-Approximation
 
-The program also supports the following potentials natively (WIP):
+The program also supports the following potentials natively:
     
         1. Coulomb Potential
         2. Square Well Potential
-        3. Gaussian Potential
-        4. Yukawa Potential
-        5. Morse Potential
-        6. Lennard-Jones Potential
+        3. Wacky non-physical Potential
 
 ## Installation
 
@@ -23,41 +20,72 @@ To install the program, clone the repository and run the following commands insi
 
 ```make -f make_scattering_solver```
 
-This will create an executable called `scattering_solver`.
+This will create an executable called `scattering_solver.x`.
 
 ## Usage
 
 To run the program, run the following command:
 
-```./scattering_solver <potential> <method> <parameters> -t <theta> -p <phi>```
+```./scattering_solver <config>```
 
-Where `<potential>` is the potential you want to use, `<method>` is the method you want to use, and `<parameters>` are the parameters for the potential. 
+Where `<config>` is the name of the configuration file. The configuration file should be a text file with the following format:
 
-The `-t` and `-p` flags are optional and are used to specify the angles theta and phi for the scattering.
+## Config File
+
+The configuration file is an xml file with the following format:
+
+```xml
+<config> <!-- configuration file for quantum scattering solver -->
+    <potential>potential</potential> <!-- coulomb, square-well, wacky -->
+    <method>method</method> <!-- low_energy, spherical, born -->
+    <potential_parameters> <!-- potential parameters -->
+        <a>a</a>  <!-- Constant for coulomb, V for square well-->
+        <b>b</b>  <!-- Radius of square well -->
+        <c>c</c>  <!-- Add later -->
+        <d>d</d>  <!-- Add later -->
+    </potential_parameters>
+    <method_parameters> <!-- method parameters -->
+        <m>mass</m> <!-- mass-->
+        <k>wave number</k> <!-- wave number -->
+        <theta>theta</theta> <!-- theta angle -->
+        <phi>phi</phi> <!-- phi angle -->
+    </method_parameters>
+    <integration_parameters>
+        <n>num_samples</n> <!-- number of integration points -->
+        <r_min>min radius</r_min> <!-- minimum radius -->
+        <r_max>max radius</r_max> <!-- maximum radius -->
+    </integration_parameters>
+    <output> <!-- output parameters -->
+        <file>output.dat</file> <!-- output file name-->
+    </output>
+</config>
+```
+
+There are sample config files to choose from in the config directory.
+
 
 ## Examples
 
-To run the program with the Coulomb potential using the General Born-Approximation method, run the following command:
+To run the program with the sample square well configuration, run the following command:
 
-```./scattering_solver coulomb general 1 -t 0 -p 0```
+```./scattering_solver square_well_config.xml```
 
-To run the program with the Square Well potential using the Low Energy Born-Approximation method, run the following command:
+## Physics / Math
 
-```./scattering_solver square_well low 1 1 -t 0 -p 0```
+The program uses the following formulas to solve for the differential cross-section:
 
-## All cmdline potentials and methods
+1. General Born-Approximation (Future Work)
+2. Low Energy (Long Wavelength) Born-Approximation
+3. Spherically Symmetric Born-Approximation
 
-### Potentials
+### Sphericallly-Symmetric Born-Approximation
 
-        1. coulomb
-        2. square_well
-        3. gaussian
-        4. yukawa
-        5. morse
-        6. lennard_jones
+The differential cross-section for the low energy Born-Approximation is given by:
 
-### Methods
-    
-            1. general
-            2. low_energy
-            3. spherical
+```dσ/dΩ = |f(θ)|^2```
+
+Where `f(θ)` is the scattering amplitude given by:
+
+```f(θ) = -2mV0/(ħ^2 * k) * ∫[0,∞] sin(kr) * V(r) * r dr```
+
+### Low Energy (Long Wavelength) Born-Approximation
