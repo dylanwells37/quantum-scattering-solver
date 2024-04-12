@@ -26,8 +26,8 @@
 
 // Constructor for Methods
 Method::Method(char *passed_method, method_parameters *passed_parameters){
-    method = passed_method;
     method_params = passed_parameters;
+    method_params->method = passed_method;
 }
 
 
@@ -38,6 +38,7 @@ Method::~Method(){
 double Method::solve_scattering(){
     // Get the integrand at a given distance r
     // for a given method type
+    char *method = method_params->method;
     if (strcmp(method, "born") == 0)
     {
         return born();
@@ -76,9 +77,7 @@ double Method::low_energy(){
     double hbar = method_params->hbar;
     double const front_const = - mass / (2 * M_PI * pow(hbar, 2));
 
-    integration_parameters *integ_params = new integration_parameters;
-    integ_params = method_params->integ_params;
-    integ_params->dimensions = 1;
+    method_params->integ_params->dimensions = 1;
     
     
     return 0;
@@ -97,19 +96,43 @@ double Method::spherical(){
     double mass = method_params->m;
     double kappa = 2 * k * sin(theta / 2);
     double result;
-    //double error;
+    double error;
     double const front_const = - 2 * mass / (pow(hbar, 2) * kappa);
 
-    // Create the integration parameters structure
-    integration_parameters *integ_params = new integration_parameters;
-    integ_params = method_params->integ_params;
-    integ_params->dimensions = 1;
+    // set dimensions of the integral
+    method_params->integ_params->dimensions = 1;
 
-    // Create the integration workspace
-    
+    // Create the Integral
+    const char *integration_type = "monte_carlo";
+    Integration *integ = new Integration(integration_type, method_params);
 
+    // Solve the integral
+    result = integ->integrate();
     
     return result;
+}
+
+
+double Method::get_integrand(double r, void * params, double theta, double phi){
+    // return the integrand for the given method type
+    char *method = method_params->method;
+    if (strcmp(method, "born") == 0)
+    {
+        return born_integrand(r, theta, phi, params);
+    }
+    else if (strcmp(method, "low_energy") == 0)
+    {
+        return low_energy_integrand(r, theta, phi, params);
+    }
+    else if (strcmp(method, "spherical") == 0)
+    {
+        return spherical_integrand(r, params);
+    }
+    else
+    {
+        std::cout << "Invalid method type" << std::endl;
+        return 0;
+    }
 }
 
 
@@ -117,8 +140,11 @@ double Method::low_energy_integrand(double r, double theta, double phi, void *pa
     // return the integrand for the low energy approximation:
     // V(r) * r^2 * sin(theta)
 
-    method_parameters *p = (method_parameters *) params;
-    double V = p->pot->get_potential(r, theta, phi);
+    method_parameters *params_ptr = (method_parameters *) params;
+
+    Potential *potential_ptr = (Potential *) params_ptr->pot;
+
+    double V = potential_ptr->get_potential(r, theta, phi);
     return V * pow(r, 2) * sin(theta);
 }
 
@@ -127,9 +153,12 @@ double Method::spherical_integrand(double r, void *params){
     // r * sin(Kr) * V(r)
 
     // V(r, theta, phi) = V(r)
-    method_parameters *p = (method_parameters *) params;
-    double V = p->pot->get_potential(r);
-    double K = p->k;
+    method_parameters *params_ptr = (method_parameters *) params;
+    
+    Potential *potential_ptr = (Potential *) params_ptr->pot;
+
+    double V = potential_ptr->get_potential(r);
+    double K = params_ptr->k;
 
     return r * sin(K * r) * V;
 }

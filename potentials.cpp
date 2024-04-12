@@ -24,8 +24,8 @@
 
 // Constructor for Potentials
 Potential::Potential(char *passed_potential, potential_parameters  *passed_parameters){
-    potential = passed_potential;
     potl_params = passed_parameters;
+    potl_params->potential = passed_potential;
 }
 
 // Destructor for Potentials
@@ -35,6 +35,7 @@ Potential::~Potential(){
 double Potential::get_potential(double r, double theta, double phi){
     // Get the potential at a given distance r
     // for a given potential type
+    char *potential = potl_params->potential;
     if (strcmp(potential, "coulomb") == 0)
     {
         return coulomb_potential(r);
@@ -45,7 +46,8 @@ double Potential::get_potential(double r, double theta, double phi){
     }
     else if (strcmp(potential, "wacky") == 0)
     {
-        return wacky_potential(r, theta, phi);
+        //return wacky_potential(r, theta, phi);
+        return 0;
     }
     else
     {
@@ -85,8 +87,7 @@ double Potential::square_well_potential(double r){
 
 }
 
-
 // Made up potential
-double wacky_potential(double r, double theta, double phi){
-    return 0;
-}
+//double wacky_potential(double r, double theta, double phi){
+//    return 0;
+//}

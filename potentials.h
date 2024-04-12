@@ -4,6 +4,8 @@
 //
 // Programmer:  Dylan Wells  <wells.1629@osu.edu>
 //
+// Revision history: https://github.com/dylanwells37/quantum-scattering-solver
+//
 //*****************************************************************
 
 #ifndef POTENTIAL_H
@@ -15,9 +17,11 @@ struct potential_parameters
     double b;
     double c;
     double d;
+    char *potential;
 };
 
 #include <string>
+
 
 class Potential
 {
@@ -28,11 +32,10 @@ class Potential
         double get_potential(double r, double theta=0, double phi=0);
 
     private:
-        char * potential;
         potential_parameters  *potl_params;
         double coulomb_potential(double r);
         double square_well_potential(double r);
-        double wacky_potential(double r, double theta, double phi);
+        //double wacky_potential(double r, double theta, double phi);
 };
 
 #endif

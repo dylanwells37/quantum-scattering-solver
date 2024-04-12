@@ -4,6 +4,8 @@
 //
 // Programmer:  Dylan Wells  <wells.1629@osu.edu>
 //
+// Revision history: https://github.com/dylanwells37/quantum-scattering-solver
+//
 //*****************************************************************
 
 #ifndef METHODS_H
@@ -20,7 +22,8 @@ struct method_parameters
     double k;
     double theta;
     double phi;
-    Potential *pot;
+    char * method;
+    void *pot;
     integration_parameters *integ_params;
 };
 
@@ -30,9 +33,9 @@ class Method
         Method(char *passed_method, method_parameters *passed_parameters);
         ~Method();
         double solve_scattering();
+        double get_integrand(double r, void *method_params, double theta=0, double phi=0);
 
     private:
-        char * method;
         method_parameters *method_params;
         double born();
         double low_energy();

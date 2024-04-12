@@ -4,13 +4,12 @@
 //
 // Programmer:  Dylan Wells  <wells.1629@osu.edu>
 //
+// Revision history: https://github.com/dylanwells37/quantum-scattering-solver
+//
 //*****************************************************************
 
 #ifndef INTEGRATION_H
 #define INTEGRATION_H
-
-#include <string>
-//#include "potentials.h"
 
 struct integration_parameters
 {
@@ -18,20 +17,24 @@ struct integration_parameters
     double min_radius;
     double max_radius;
     int num_samples;
-    //void *method_params;
 };
 
+#include <string>
+#include "potentials.h"
+#include "methods.h"
 
 class Integration
 {
     public:
-        Integration(char *passed_method, method_parameters *passed_parameters);
+        Integration(const char *passed_method, void *passed_parameters);
         ~Integration();
+        double integrate();
 
     private:
-        char * method;
-        method_parameters *method_params;
-        integration_parameters *integ_params;
+        const char * method;
+        void *method_params;
+        double gsl_integration();
+        double monte_carlo_integration();
 
 };
 

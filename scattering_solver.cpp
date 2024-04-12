@@ -35,9 +35,11 @@ using namespace std;
 #include "integration.h" // Header file for the Integration class
 
 
-int check_parameters(char **potential_ptr, char **method_ptr,
+int check_parameters(string filename,
+                     char **potential_ptr, char **method_ptr,
                      potential_parameters **potl_params_ptr,
-                     method_parameters **method_params_ptr);
+                     method_parameters **method_params_ptr,
+                     integration_parameters **integration_params_ptr);
 
 int main (int argc, char *argv[])
 {   
@@ -49,10 +51,14 @@ int main (int argc, char *argv[])
     char *method;
     potential_parameters *potl_params = new potential_parameters;
     method_parameters *method_params = new method_parameters;
+    integration_parameters *integ_params = new integration_parameters;
 
     // Check to see if the input parameters are valid
     // And load the parameters from the config.xml file
-    check_parameters(&potential, &method, &potl_params, &method_params);
+    check_parameters(filename, 
+                    &potential, &method, 
+                    &potl_params, &method_params,
+                    &integ_params);
 
     // Create the potential and method objects
     Potential *pot = new Potential(potential, potl_params);
@@ -67,7 +73,8 @@ int main (int argc, char *argv[])
 
 }
 
-int check_parameters(string *filename,
+
+int check_parameters(string filename,
                      char **potential_ptr, char **method_ptr,
                      potential_parameters **potl_params_ptr,
                      method_parameters **method_params_ptr,
@@ -79,16 +86,17 @@ int check_parameters(string *filename,
     string filepath = "configs/" + filename;
 
     if (!doc.load_file(filepath.c_str()))
+    {
         cout << "Could not load config.xml" << endl;
         exit(1);
     }
-
+    
+    
     pugi::xml_node config = doc.child("config");
 
     // Set values of potential and method parameters
     *potential_ptr = strdup(config.child_value("potential"));
     *method_ptr = strdup(config.child_value("method"));
-    *integration_ptr = strdup(config.child_value("integration"));
 
     pugi::xml_node potl_params = config.child("potential_parameters");
     (*potl_params_ptr)->a = potl_params.child("a").text().as_double();
