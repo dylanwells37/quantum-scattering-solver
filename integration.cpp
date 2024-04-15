@@ -7,9 +7,11 @@
 // Revision history: https://github.com/dylanwells37/quantum-scattering-solver
 //
 // Supports:
-//  - 1D gsl integration
+//  - 1D gsl integration (wip)
 //  - 1D monte carlo integration
 //  - 3D monte carlo integration
+//  - 1D milne rule
+//  - integrands for different methods
 //*****************************************************************
 // Include Files
 
@@ -56,7 +58,7 @@ double Integration::integrate(int num_steps){
 }
 
 
-// gsl integration
+// gsl integration (1D)
 double Integration::gsl_integration(int num_steps){
     // Integrate a function using the gsl library
     // define the integrand
@@ -96,12 +98,12 @@ double Integration::monte_carlo_integration(int num_steps){
     // Integrate a function using the monte carlo method
     // Randomly sample points in the integration region
     // and average the function value at those points
+
     method_parameters *mp_ptr = (method_parameters *) method_params;
     integration_parameters *integ_params = mp_ptr->integ_params;
 
 
     int dimensions = integ_params->dimensions;
-    //int num_samples = integ_params->num_samples;
     double min_radius = integ_params->min_radius;
     double max_radius = integ_params->max_radius;
     
@@ -109,7 +111,6 @@ double Integration::monte_carlo_integration(int num_steps){
     double volume = 0;
     double r, rand_theta, rand_phi;
     double result;
-    //double error;
     double lower_bound = min_radius;
     double upper_bound = max_radius;
 
@@ -125,13 +126,31 @@ double Integration::monte_carlo_integration(int num_steps){
         result = (sum / num_steps) * volume;
     }
     else if (dimensions == 3)
-    {
+    {   
+        double x;
+        double y;
+        double z;
         // 3D monte carlo integration
         for (int i = 0; i < num_steps; i++)
-        {
-            r = lower_bound + (upper_bound - lower_bound) * rand() / RAND_MAX;
-            rand_theta = 2 * M_PI * rand() / RAND_MAX;
-            rand_phi = M_PI * rand() / RAND_MAX;
+        {   
+            // Randomly pick an x,y,z coord and then check to see if it is
+            // within the sphere of integration to get a uniform distribtuion
+            // over the volume. Potentially computationally inefficient compared to other methods
+            // suggested here: https://math.stackexchange.com/questions/87230/picking-random-points-in-the-volume-of-sphere-with-uniform-probability
+            while (true)
+            {
+                x = lower_bound + (upper_bound - lower_bound) * rand() / RAND_MAX;
+                y = lower_bound + (upper_bound - lower_bound) * rand() / RAND_MAX;
+                z = lower_bound + (upper_bound - lower_bound) * rand() / RAND_MAX;
+                r = sqrt(x * x + y * y + z * z);
+                if (r <= max_radius)
+                {
+                    break;
+                }
+            }
+            rand_theta = acos(z / r);
+            rand_phi = atan2(y, x);
+
             sum += get_integrand(r, method_params, rand_theta, rand_phi);
         }
         volume = 4 * M_PI * pow(max_radius, 3) / 3;
@@ -211,14 +230,13 @@ double Integration::get_integrand(double r, void * params, double integ_theta, d
 
 double Integration::low_energy_integrand(double r, double integ_theta, double integ_phi, void *params){
     // return the integrand for the low energy approximation:
-    // V(r) * r^2 * sin(theta)
+    // V(r) d^3r
 
     method_parameters *params_ptr = (method_parameters *) params;
-
     Potential *potential_ptr = (Potential *) params_ptr->pot;
-
     double V = potential_ptr->get_potential(r, integ_theta, integ_phi);
-    return V * pow(r, 2) * sin(integ_theta);
+
+    return V;
 }
 
 double Integration::spherical_integrand(double r, void *params, double integ_theta=0.0, double integ_phi=0.0){

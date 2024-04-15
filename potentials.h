@@ -35,7 +35,7 @@ class Potential
         potential_parameters  *potl_params;
         double coulomb_potential(double r);
         double square_well_potential(double r);
-        //double wacky_potential(double r, double theta, double phi);
+        double wacky_potential(double r, double theta, double phi);
 };
 
 #endif

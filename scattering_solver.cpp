@@ -8,7 +8,7 @@
 //  Notes:
 //  
 // Three different formulas for f(theta, phi):
-// 1. Born approximation
+// 1. Born approximation (NOT IMPLEMENTED
 //  f(theta, phi) = -m/(2pih^2) * integral[e^(i(k prime - k) dot r0) * V(r0) d^3r0]
 //
 // 2. Low energy approximation:
@@ -155,15 +155,16 @@ double get_exact(string filename){
     // Return the exact solution for the sample config files
     if (filename == "spherical_sw")
     {
-        return -20.63684622108122;;
+        return -19.61673544968789;
     }
-    else if (filename == "square_well")
+    else if (filename == "low_energy_sw")
     {
-        return 0.0;
+        return -5235.987755982989;
     }
-    else if (filename == "wacky")
+    else if (filename == "spherical_coulomb")
     {
-        return 0.0;
+        // Infinite cross-section, will not converge
+        return -1.0/0.0;
     }
     else
     {

@@ -1,9 +1,9 @@
 <config> <!-- configuration file for quantum scattering solver -->
-    <potential>square_well</potential> <!-- coulomb, square-well, wacky -->
+    <potential>coulomb</potential> <!-- coulomb, square-well, wacky -->
     <method>spherical</method> <!-- low_energy, spherical, born -->
     <potential_parameters> <!-- potential parameters -->
-        <a>10.0</a>  <!-- Constant for coulomb, V for square well-->
-        <b>5.0</b>  <!-- Radius of square well -->
+        <a>1.0</a>  <!-- Constant for coulomb, V for square well-->
+        <b>1.0</b>  <!-- Radius of square well -->
         <c>1.0</c>
         <d>1.0</d>
     </potential_parameters>
@@ -15,7 +15,7 @@
     </method_parameters>
     <integration_parameters>
         <num_samples>100</num_samples> <!-- number of integration points -->
-        <min_radius>0.0</min_radius> <!-- minimum radius -->
+        <min_radius>0.00001</min_radius> <!-- minimum radius -->
         <max_radius>10.0</max_radius> <!-- maximum radius -->
     </integration_parameters>
 </config>

@@ -9,7 +9,7 @@
 // Supports:
 //  - coulomb_potential
 //  - square_well_potential
-//  - wacky potential
+//  - wacky potential (wip)
 //*****************************************************************
 // Include Files
 
@@ -88,6 +88,6 @@ double Potential::square_well_potential(double r){
 }
 
 // Made up potential
-//double wacky_potential(double r, double theta, double phi){
-//    return 0;
-//}
+double wacky_potential(double r, double theta, double phi){
+    return 0;
+}
