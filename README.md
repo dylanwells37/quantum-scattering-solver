@@ -10,9 +10,9 @@ This program supports three different methods of solving the for the differentia
 
 The program also supports the following potentials natively:
     
-        1. Coulomb Potential
+        1. Coulomb Potential (Infinite Cross-section, will not converge)
         2. Square Well Potential
-        3. Wacky non-physical Potential
+        3. Wacky non-physical Potential (Future Work)
 
 ## Installation
 
@@ -63,6 +63,19 @@ The configuration file is an xml file with the following format:
 
 There are sample config files to choose from in the config directory.
 
+Use 
+
+`./scattering_solver.x low_energy_sw`
+
+`./scattering_solver.x spherical_sw`
+
+For the low energy (3D integral) or spherical square well (1D integral) cross-sections.
+
+### Plots
+
+Included with these are spherical_sw.plt and low_energy_sw.plt to show comparisons
+with milne and monte-carlo integration with the exact result found in mathematica.
+
 
 ## Examples
 
@@ -89,3 +102,11 @@ Where `f(θ)` is the scattering amplitude given by:
 ```f(θ) = -2mV0/(ħ^2 * k) * ∫[0,∞] sin(kr) * V(r) * r dr```
 
 ### Low Energy (Long Wavelength) Born-Approximation
+
+The differential cross-section for the low energy Born-Approximation is given by:
+
+```dσ/dΩ = |f(θ)|^2```
+
+Where `f(θ)` is the scattering amplitude given by:
+
+```f(θ) =  -m/(2*pi*h^2)  ∫ V(r) dr0^3```
