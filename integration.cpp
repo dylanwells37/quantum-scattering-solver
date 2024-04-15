@@ -122,7 +122,7 @@ double Integration::monte_carlo_integration(int num_steps){
             sum += get_integrand(r, method_params, 0.0, 0.0);
         }
         volume = upper_bound - lower_bound;
-        result = (sum / num_steps) / volume;
+        result = (sum / num_steps) * volume;
     }
     else if (dimensions == 3)
     {
@@ -135,7 +135,7 @@ double Integration::monte_carlo_integration(int num_steps){
             sum += get_integrand(r, method_params, rand_theta, rand_phi);
         }
         volume = 4 * M_PI * pow(max_radius, 3) / 3;
-        result = (sum / num_steps) / volume;
+        result = (sum / num_steps) * volume;
     }
     else
     {

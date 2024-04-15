@@ -25,6 +25,8 @@ struct method_parameters
     char * method; // method type
     void *pot; // pointer to potential parameters
     integration_parameters *integ_params; // pointer to integration parameters
+    const char *output_file; // output file name
+    double exact; // exact solution if known
 };
 
 class Method
@@ -33,6 +35,7 @@ class Method
         Method(char *passed_method, method_parameters *passed_parameters);
         ~Method();
         double solve_scattering();
+        double relative_error(double exact, double approx);
 
     private:
         method_parameters *method_params;

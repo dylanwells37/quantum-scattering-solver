@@ -34,6 +34,7 @@ using namespace std;
 #include "methods.h"     // Header file for the Method class
 #include "integration.h" // Header file for the Integration class
 
+double get_exact(string filename);
 
 int check_parameters(string filename,
                      char **potential_ptr, char **method_ptr,
@@ -45,7 +46,7 @@ int main (int argc, char *argv[])
 {   
     // Initialize Variables
     string filename = argv[1];
-    double result;
+    //double result;
     //double error;
     char *potential;
     char *method;
@@ -69,7 +70,7 @@ int main (int argc, char *argv[])
     // Solve for the differential cross-section
     meth->solve_scattering();
 
-    cout << "Solved for the differential cross-section" << endl;
+    cout << "Solved for the differential cross-section in " << method_params->output_file << endl;
 
 }
 
@@ -83,11 +84,19 @@ int check_parameters(string filename,
     char *potential;
     char *method;
     pugi::xml_document doc;
-    string filepath = "configs/" + filename;
+    string filepath = "configs/" + filename + ".xml";
 
+    string output_filename = filename + "_output.dat";
+
+    if (filename == "")
+    {
+        cout << "No config file specified" << endl;
+        exit(1);
+    }
+    cout << "Config filepath: " << filepath << endl;
     if (!doc.load_file(filepath.c_str()))
     {
-        cout << "Could not load config.xml" << endl;
+        cout << "Could not load config file" << endl;
         exit(1);
     }
     
@@ -114,6 +123,8 @@ int check_parameters(string filename,
     (*method_params_ptr)->k = method_params.child("k").text().as_double();
     (*method_params_ptr)->theta = method_params.child("theta").text().as_double();
     (*method_params_ptr)->phi = method_params.child("phi").text().as_double();
+    (*method_params_ptr)->output_file = strdup(output_filename.c_str());
+    (*method_params_ptr)->exact = get_exact(filename);
 
     potential = *potential_ptr;
     method = *method_ptr;
@@ -138,3 +149,25 @@ int check_parameters(string filename,
 
     return 0;
 }
+
+
+double get_exact(string filename){
+    // Return the exact solution for the sample config files
+    if (filename == "spherical_sw")
+    {
+        return -20.63684622108122;;
+    }
+    else if (filename == "square_well")
+    {
+        return 0.0;
+    }
+    else if (filename == "wacky")
+    {
+        return 0.0;
+    }
+    else
+    {
+        //return not a number to signify we don't know the exact solution
+        return 0.0/0.0;
+    }
+} 

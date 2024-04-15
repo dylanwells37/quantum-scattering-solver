@@ -81,6 +81,7 @@ double Method::low_energy(){
     method_params->integ_params->dimensions = 1;
     
     
+    
     return 0;
 
 }
@@ -96,9 +97,12 @@ double Method::spherical(){
     double hbar = method_params->hbar;
     double mass = method_params->m;
     double kappa = 2 * k * sin(theta / 2);
+    const char *output_file = method_params->output_file;
+    double exact = method_params->exact;
     double monte_result;
     double milne_result;
-    //double error;
+    double monte_error;
+    double milne_error;
     double const front_const = - 2 * mass / (pow(hbar, 2) * kappa);
 
     // set dimensions of the integral
@@ -110,18 +114,37 @@ double Method::spherical(){
 
     // output file
     std::ofstream output;
-    output.open("spherical_output.dat");
-     
+    output.open(output_file);  
 
     // Loop through number of steps N
-    for (int num_steps = 2; num_steps <= 1000000; num_steps*=2){
-        monte_result = front_const * monte_integ->integrate(num_steps);
-        milne_result = front_const * milne_integ->integrate(num_steps);
-        output << num_steps << " " << monte_result << " " << milne_result << std::endl;
+    for (int num_steps = 2; num_steps <= 100000000; num_steps*=2){
+        std::cout << num_steps << std::endl;
+        // only comparing the integrals as the front const is the same for both
+        monte_result = monte_integ->integrate(num_steps);
+        milne_result = milne_integ->integrate(num_steps);
+        
+        output << log10(num_steps) << monte_result * front_const << " " 
+                << milne_result * front_const << " ";
+
+        // check if we have the exact. If so, we can calculate the error
+        if (isnan(exact)){
+            output << std::endl;
+        }
+        else{
+            monte_error = relative_error(exact, monte_result);
+            milne_error = relative_error(exact, milne_result);
+            output << log10(monte_error) << " " << log10(milne_error) << std::endl;
+        }
+
     }
 
     output.close();
 
     return 0;
+}
+
+// Calculate the relative error
+double Method::relative_error(double exact, double approx){
+    return fabs((exact - approx) / exact);
 }
 

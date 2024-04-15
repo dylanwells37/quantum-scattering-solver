@@ -1,2 +1,6 @@
 *.x
 *.o
+*.vscode
+*fit.log
+*.dat
+*.nfs
