@@ -15,6 +15,7 @@
 
 #include <iostream>
 #include <iomanip>
+#include <fstream>
 #include <cmath>
 #include <string.h>
 #include <gsl/gsl_integration.h>
@@ -90,79 +91,37 @@ double Method::spherical(){
     // return the value of f(theta,phi) for the spherical approximation
 
     double theta = method_params->theta;
-    double phi = method_params->phi;
+    //double phi = method_params->phi;
     double k = method_params->k;
     double hbar = method_params->hbar;
     double mass = method_params->m;
     double kappa = 2 * k * sin(theta / 2);
-    double result;
-    double error;
+    double monte_result;
+    double milne_result;
+    //double error;
     double const front_const = - 2 * mass / (pow(hbar, 2) * kappa);
 
     // set dimensions of the integral
     method_params->integ_params->dimensions = 1;
 
-    // Create the Integral
-    const char *integration_type = "monte_carlo";
-    Integration *integ = new Integration(integration_type, method_params);
+    // Create the Integrals for monte_carlo and gsl
+    Integration *monte_integ = new Integration("monte_carlo", method_params);
+    Integration *milne_integ = new Integration("milne", method_params);
 
-    // Solve the integral
-    result = integ->integrate();
-    
-    return result;
-}
+    // output file
+    std::ofstream output;
+    output.open("spherical_output.dat");
+     
 
-
-double Method::get_integrand(double r, void * params, double theta, double phi){
-    // return the integrand for the given method type
-    char *method = method_params->method;
-    if (strcmp(method, "born") == 0)
-    {
-        return born_integrand(r, theta, phi, params);
+    // Loop through number of steps N
+    for (int num_steps = 2; num_steps <= 1000000; num_steps*=2){
+        monte_result = front_const * monte_integ->integrate(num_steps);
+        milne_result = front_const * milne_integ->integrate(num_steps);
+        output << num_steps << " " << monte_result << " " << milne_result << std::endl;
     }
-    else if (strcmp(method, "low_energy") == 0)
-    {
-        return low_energy_integrand(r, theta, phi, params);
-    }
-    else if (strcmp(method, "spherical") == 0)
-    {
-        return spherical_integrand(r, params);
-    }
-    else
-    {
-        std::cout << "Invalid method type" << std::endl;
-        return 0;
-    }
-}
 
+    output.close();
 
-double Method::low_energy_integrand(double r, double theta, double phi, void *params){
-    // return the integrand for the low energy approximation:
-    // V(r) * r^2 * sin(theta)
-
-    method_parameters *params_ptr = (method_parameters *) params;
-
-    Potential *potential_ptr = (Potential *) params_ptr->pot;
-
-    double V = potential_ptr->get_potential(r, theta, phi);
-    return V * pow(r, 2) * sin(theta);
-}
-
-double Method::spherical_integrand(double r, void *params){
-    // return the integrand for the spherical approximation:
-    // r * sin(Kr) * V(r)
-
-    // V(r, theta, phi) = V(r)
-    method_parameters *params_ptr = (method_parameters *) params;
-    
-    Potential *potential_ptr = (Potential *) params_ptr->pot;
-
-    double V = potential_ptr->get_potential(r);
-    double K = params_ptr->k;
-
-    return r * sin(K * r) * V;
-}
-
-double Method::born_integrand(double r, double theta, double phi, void *params){
     return 0;
 }
+

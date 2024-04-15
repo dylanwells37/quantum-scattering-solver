@@ -13,10 +13,10 @@
 
 struct integration_parameters
 {
-    int dimensions;
-    double min_radius;
-    double max_radius;
-    int num_samples;
+    int dimensions; // 1 or 3
+    double min_radius; // minimum radius
+    double max_radius; // maximum radius
+    int num_samples; // number of samples
 };
 
 #include <string>
@@ -28,14 +28,18 @@ class Integration
     public:
         Integration(const char *passed_method, void *passed_parameters);
         ~Integration();
-        double integrate();
+        double integrate(int num_steps);
 
     private:
         const char * method;
         void *method_params;
-        double gsl_integration();
-        double monte_carlo_integration();
-
+        double gsl_integration(int num_steps);
+        double monte_carlo_integration(int num_steps);
+        double milne_rule(int num_steps);
+        double get_integrand(double r, void *method_params, double theta=0, double phi=0);
+        double low_energy_integrand(double r, double integ_theta, double integ_phi, void *params);
+        double spherical_integrand(double r, void *params, double integ_theta, double integ_phi);
+        double born_integrand(double r, double integ_theta, double integ_phi, void *params);
 };
 
 #endif

@@ -67,9 +67,9 @@ int main (int argc, char *argv[])
     Method *meth = new Method(method, method_params);
 
     // Solve for the differential cross-section
-    result = meth->solve_scattering();
+    meth->solve_scattering();
 
-    cout << "The differential cross-section is: " << result << endl;//<< " +/- " << error << endl;
+    cout << "Solved for the differential cross-section" << endl;
 
 }
 

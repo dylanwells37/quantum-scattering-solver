@@ -2,21 +2,21 @@
     <potential>square_well</potential> <!-- coulomb, square-well, wacky -->
     <method>spherical</method> <!-- low_energy, spherical, born -->
     <potential_parameters> <!-- potential parameters -->
-        <a>1.12454</a>  <!-- Constant for coulomb, V for square well-->
-        <b>1.1423</b>  <!-- Radius of square well -->
-        <c>1.6345</c>
-        <d>1.68579</d>
+        <a>10.0</a>  <!-- Constant for coulomb, V for square well-->
+        <b>5.0</b>  <!-- Radius of square well -->
+        <c>1.0</c>
+        <d>1.0</d>
     </potential_parameters>
     <method_parameters> <!-- method parameters -->
-        <m>1.35487</m> <!-- mass-->
-        <k>1.34580</k> <!-- wave number -->
-        <theta>90.234532</theta> <!-- theta angle -->
-        <phi>22.5345</phi> <!-- phi angle -->
+        <m>1.0</m> <!-- mass-->
+        <k>1.0</k> <!-- wave number -->
+        <theta>90.0</theta> <!-- theta angle -->
+        <phi>0.0</phi> <!-- phi angle -->
     </method_parameters>
     <integration_parameters>
-        <n>100</n> <!-- number of integration points -->
-        <r_min>0.1</r_min> <!-- minimum radius -->
-        <r_max>10.0</r_max> <!-- maximum radius -->
+        <num_samples>100</num_samples> <!-- number of integration points -->
+        <min_radius>0.1</min_radius> <!-- minimum radius -->
+        <max_radius>10.0</max_radius> <!-- maximum radius -->
     </integration_parameters>
     <output> <!-- output parameters -->
         <file>output.dat</file> <!-- output file name-->
