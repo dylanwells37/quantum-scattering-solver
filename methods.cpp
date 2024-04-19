@@ -150,9 +150,11 @@ double Method::spherical(){
     output << "# log10(N)     Monte Carlo Result   Milne Result   log10(Monte Carlo Error)   log10(Milne Error)" << std::endl;
 
     // Loop through number of steps N
-    for (int num_steps = 2; num_steps <= 100000000; num_steps*=2){
+    for (int n = 2; n <= 100000000; n*=2){
+        int num_steps = 4 * n + 1;
         std::cout << "Calculating for: " << num_steps << " Steps." << std::endl;
         // only comparing the integrals as the front const is the same for both
+
         monte_result = monte_integ->integrate(num_steps);
         milne_result = milne_integ->integrate(num_steps);
         

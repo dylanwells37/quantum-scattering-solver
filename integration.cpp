@@ -139,11 +139,13 @@ double Integration::monte_carlo_integration(int num_steps){
             // suggested here: https://math.stackexchange.com/questions/87230/picking-random-points-in-the-volume-of-sphere-with-uniform-probability
             while (true)
             {
-                x = lower_bound + (upper_bound - lower_bound) * rand() / RAND_MAX;
-                y = lower_bound + (upper_bound - lower_bound) * rand() / RAND_MAX;
-                z = lower_bound + (upper_bound - lower_bound) * rand() / RAND_MAX;
+                // Generate random x, y, z, between -max_radius and max_radius
+                x = 2 * max_radius * rand() / RAND_MAX - max_radius;
+                y = 2 * max_radius * rand() / RAND_MAX - max_radius;
+                z = 2 * max_radius * rand() / RAND_MAX - max_radius;
+
                 r = sqrt(x * x + y * y + z * z);
-                if (r <= max_radius)
+                if (r <= max_radius && r >= min_radius)
                 {
                     break;
                 }
@@ -168,7 +170,7 @@ double Integration::monte_carlo_integration(int num_steps){
 
 double Integration::milne_rule (int num_points) {
     /* Calcualte the milne rule estimation for a given integrand,
-    num_points, and range */
+    num_points, and range, Needs 4n +1 number of intervals*/
 
     method_parameters *mp_ptr = (method_parameters *) method_params;
     integration_parameters *integ_params = mp_ptr->integ_params;
