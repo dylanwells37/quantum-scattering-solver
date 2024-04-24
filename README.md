@@ -28,7 +28,7 @@ To run the program, run the following command:
 
 ```./scattering_solver <config>```
 
-Where `<config>` is the name of the configuration file. The configuration file should be a text file with the following format:
+Where `<config>` is the name of the configuration file. The configuration file should be an xml file with the following format:
 
 ## Config File
 
@@ -74,14 +74,8 @@ For the low energy (3D integral) or spherical square well (1D integral) cross-se
 ### Plots
 
 Included with these are spherical_sw.plt and low_energy_sw.plt to show comparisons
-with milne and monte-carlo integration with the exact result found in mathematica.
+with milne and monte-carlo integration against the exact result found in mathematica.
 
-
-## Examples
-
-To run the program with the sample square well configuration, run the following command:
-
-```./scattering_solver square_well_config.xml```
 
 ## Physics / Math
 
